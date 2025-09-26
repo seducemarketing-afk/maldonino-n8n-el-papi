@@ -9,11 +9,8 @@ USER root
 # Es crucial tener python3-dev para que pip pueda compilar las dependencias de yt-dlp.
 RUN apk add --no-cache ffmpeg python3 py3-pip python3-dev
 
-# PASO 2: Instala yt-dlp y limpia el entorno
-# Separamos la instalación de pip3 en un comando RUN diferente para resolver conflictos.
-# Eliminamos los paquetes de desarrollo después de usarlos para reducir el tamaño final de la imagen.
-RUN pip3 install yt-dlp \
-    && apk del python3-dev
+# PASO 2: Instala yt-dlp. (Hemos eliminado el comando 'apk del python3-dev' que causaba el conflicto)
+RUN pip3 install yt-dlp
 
 # --- FIN DE SECCIÓN CRÍTICA DE INSTALACIÓN ---
 
