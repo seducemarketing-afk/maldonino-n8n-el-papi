@@ -5,15 +5,14 @@ FROM n8nio/n8n:latest
 # Cambia temporalmente al usuario root para instalar yt-dlp y ffmpeg
 USER root
 
-# Actualiza la lista de paquetes e instala las dependencias usando 'apk' (compatible con Alpine Linux)
-# Incluimos 'python3-dev' que es necesario para que pip pueda compilar las dependencias de yt-dlp.
-RUN apk add --no-cache \
-    ffmpeg \
-    python3 \
-    py3-pip \
-    python3-dev \
-    && pip3 install yt-dlp \
-    # Limpia los archivos de desarrollo después de la instalación para reducir el tamaño de la imagen.
+# PASO 1: Instala las herramientas básicas y dependencias de Python (ffmpeg, python3, pip, y python3-dev)
+# Es crucial tener python3-dev para que pip pueda compilar las dependencias de yt-dlp.
+RUN apk add --no-cache ffmpeg python3 py3-pip python3-dev
+
+# PASO 2: Instala yt-dlp y limpia el entorno
+# Separamos la instalación de pip3 en un comando RUN diferente para resolver conflictos.
+# Eliminamos los paquetes de desarrollo después de usarlos para reducir el tamaño final de la imagen.
+RUN pip3 install yt-dlp \
     && apk del python3-dev
 
 # --- FIN DE SECCIÓN CRÍTICA DE INSTALACIÓN ---
