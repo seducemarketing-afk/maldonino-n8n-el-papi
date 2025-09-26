@@ -5,12 +5,11 @@ FROM n8nio/n8n:latest
 # Cambia temporalmente al usuario root para instalar yt-dlp y ffmpeg
 USER root
 
-# Actualiza la lista de paquetes e instala ffmpeg, Python y yt-dlp
-# FFmpeg es necesario para muchos procesos de video/audio que yt-dlp puede requerir.
-RUN apt-get update && apt-get install -y \
+# Actualiza la lista de paquetes e instala las dependencias usando 'apk' (compatible con Alpine Linux)
+RUN apk add --no-cache \
     ffmpeg \
     python3 \
-    python3-pip \
+    py3-pip \
     && pip3 install yt-dlp
 
 # --- FIN DE SECCIÓN CRÍTICA DE INSTALACIÓN ---
